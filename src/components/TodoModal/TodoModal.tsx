@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Loader } from '../Loader';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { getUser } from '../../api';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
+import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo | null;
-  onCloseModal: (show: Todo | null) => void;
+  onCloseModal: (todo: null) => void;
 };
 
-const TodoModalComponent: React.FC<Props> = ({
-  todo,
-  onCloseModal: showButton,
-}) => {
+export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -20,7 +18,11 @@ const TodoModalComponent: React.FC<Props> = ({
       setUser(null);
       getUser(todo.userId).then(setUser);
     }
-  }, [todo?.userId]);
+  }, [todo?.id]);
+
+  const handleClose = () => {
+    onCloseModal(null);
+  };
 
   if (!todo) {
     return null;
@@ -42,12 +44,11 @@ const TodoModalComponent: React.FC<Props> = ({
               {`Todo #${todo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => showButton(null)}
+              onClick={handleClose}
             />
           </header>
 
@@ -57,18 +58,17 @@ const TodoModalComponent: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
-                {todo.completed ? 'Done' : `Planned`}
+                {todo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}
-
-              <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              <a href={`mailto:${user.email}`}>{user.name}</a>
             </p>
           </div>
         </div>
@@ -76,5 +76,3 @@ const TodoModalComponent: React.FC<Props> = ({
     </div>
   );
 };
-
-export const TodoModal = React.memo(TodoModalComponent);

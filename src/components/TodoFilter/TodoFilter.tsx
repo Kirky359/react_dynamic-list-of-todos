@@ -1,5 +1,4 @@
 import { Type } from '../../App';
-
 type Props = {
   onFilterChange: (type: Type) => void;
   query: string;
@@ -8,13 +7,21 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  onFilterChange: filterType,
+  onFilterChange,
   query,
-  onQueryChange: setQuery,
+  onQueryChange,
   filter,
 }) => {
-  const handleFilterType = (type: Type) => {
-    filterType(type);
+  const handleFilterChange = (type: Type) => {
+    onFilterChange(type);
+  };
+
+  const handleQueryChange = (value: string) => {
+    onQueryChange(value);
+  };
+
+  const handleClearQuery = () => {
+    onQueryChange('');
   };
 
   return (
@@ -24,7 +31,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={event => handleFilterType(event.target.value as Type)}
+            onChange={event => handleFilterChange(event.target.value as Type)}
           >
             <option value={Type.All}>All</option>
             <option value={Type.Active}>Active</option>
@@ -40,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={e => handleQueryChange(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -52,7 +59,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={handleClearQuery}
             />
           </span>
         )}
