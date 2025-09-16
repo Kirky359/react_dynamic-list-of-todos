@@ -56,9 +56,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filterType={setFilter}
+                onFilterChange={setFilter}
                 query={query}
-                setQuery={setQuery}
+                onQueryChange={setQuery}
                 filter={filter}
               />
             </div>
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  buttonClicked={setShowTodo}
+                  onSelectTodo={setShowTodo}
                   selectedTodoId={selectedTodoId}
                 />
               )}
@@ -78,7 +78,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showTodo && <TodoModal todo={showTodo} showButton={setShowTodo} />}
+      {showTodo && <TodoModal todo={showTodo} onCloseModal={setShowTodo} />}
     </>
   );
 };

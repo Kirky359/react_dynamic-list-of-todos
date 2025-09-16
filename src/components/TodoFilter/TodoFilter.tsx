@@ -1,16 +1,16 @@
 import { Type } from '../../App';
 
 type Props = {
-  filterType: (type: Type) => void;
+  onFilterChange: (type: Type) => void;
   query: string;
-  setQuery: (value: string) => void;
+  onQueryChange: (value: string) => void;
   filter: Type;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  filterType,
+  onFilterChange: filterType,
   query,
-  setQuery,
+  onQueryChange: setQuery,
   filter,
 }) => {
   const handleFilterType = (type: Type) => {

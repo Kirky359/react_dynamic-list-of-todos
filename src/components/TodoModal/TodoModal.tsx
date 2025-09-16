@@ -6,10 +6,13 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo | null;
-  showButton: (show: Todo | null) => void;
+  onCloseModal: (show: Todo | null) => void;
 };
 
-const TodoModalComponent: React.FC<Props> = ({ todo, showButton }) => {
+const TodoModalComponent: React.FC<Props> = ({
+  todo,
+  onCloseModal: showButton,
+}) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {

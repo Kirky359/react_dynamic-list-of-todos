@@ -1,19 +1,20 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  buttonClicked: (todo: Todo) => void;
+  onSelectTodo: (todo: Todo) => void;
   selectedTodoId: number | null;
 };
 
 const TodoListComponent: React.FC<Props> = ({
   todos,
-  buttonClicked,
+  onSelectTodo,
   selectedTodoId,
 }) => {
   const handleButtonClick = (todo: Todo) => {
-    buttonClicked(todo);
+    onSelectTodo(todo);
   };
 
   return (
@@ -33,7 +34,7 @@ const TodoListComponent: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className="" key={todo.id}>
+          <tr data-cy="todo" key={todo.id}>
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
@@ -44,9 +45,10 @@ const TodoListComponent: React.FC<Props> = ({
             </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.title}
               </p>
@@ -60,11 +62,10 @@ const TodoListComponent: React.FC<Props> = ({
               >
                 <span className="icon">
                   <i
-                    className={
-                      todo.id === selectedTodoId
-                        ? 'far fa-eye-slash'
-                        : 'far fa-eye'
-                    }
+                    className={classNames('far', {
+                      'fa-eye-slash': todo.id === selectedTodoId,
+                      'fa-eye': todo.id !== selectedTodoId,
+                    })}
                   />
                 </span>
               </button>
